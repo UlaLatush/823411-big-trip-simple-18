@@ -7,20 +7,18 @@ import EventNewView from '../view/event-new-view.js';
 import EventEditView from '../view/event-edit-view.js';
 
 export default class BoardPresenter {
-  eventsList = new TripListView();
+  tripList = new TripListView();
 
   init = (boardContainer) => {
     this.boardContainer = boardContainer;
 
     render(new SortView(), this.boardContainer);
-    render(this.eventsList, this.boardContainer);
-    render(new EventEditView, this.eventsList.getElement());
-    render(new EventNewView(), this.eventsList.getElement());
+    render(this.tripList, this.boardContainer);
+    render(new EventEditView, this.tripList.getElement());
+    render(new EventNewView(), this.tripList.getElement());
 
     for (let i = 0; i < 3; i++) {
-      render(new EventView(), this.eventsList.getElement());
+      render(new EventView(), this.tripList.getElement());
     }
   };
 }
-
-
