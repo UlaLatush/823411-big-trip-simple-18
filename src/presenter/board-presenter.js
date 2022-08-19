@@ -1,4 +1,3 @@
-
 import {render} from '../render.js';
 import EventView from '../view/event-view.js';
 import SortView from '../view/sort-view.js';
