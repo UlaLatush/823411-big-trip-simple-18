@@ -64,7 +64,7 @@ const destinations = [
     pictures: [
       {
         'src': generatePicture(),
-        'description': 'Athens parliament building'
+        'description': 'Athens parliament main building'
       },
       {
         'src': generatePicture(),
