@@ -1,5 +1,4 @@
 import {getRandomInteger} from '../utils.js';
-import {PICTURES_PER_DESTINATION} from './const.js';
 
 const generatePicture = () => `https://picsum.photos/300/200?random=${getRandomInteger(1, 5)}`;
 
@@ -87,14 +86,8 @@ const destinations = [
   }
 ];
 
-const getDestinations = () => {
-  return destinations;
-};
+const getDestinations = () => destinations;
 
-const getDestinationById = (id) => {
-  return destinations.find(destination => {
-    return destination.id === id
-  });
-}
+const getDestinationById = (id) => destinations.find(destination => { return destination.id === id; });
 
 export {getDestinations, getDestinationById}

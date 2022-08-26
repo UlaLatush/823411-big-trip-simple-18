@@ -68,20 +68,10 @@ const offersByType = [
   }
 ];
 
-const getOffers = () => {
-  return offers;
-};
+const getOffers = () => offers;
 
-const getOffersByType = (type) => {
-  return offersByType.find( offer => {
-    return offer.type === type;
-  }).offers;
-}
+const getOffersByType = (type) => offersByType.find( offer => { return offer.type === type; }).offers;
 
-const getOfferById = (id) => {
-  return offers.find(offer => {
-    return offer.id === id
-  });
-}
+const getOfferById = (id) => offers.find(offer => { return offer.id === id; });
 
 export {getOffers, getOfferById, getOffersByType};
