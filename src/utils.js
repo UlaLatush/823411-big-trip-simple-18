@@ -7,14 +7,15 @@ const getRandomInteger = (a = 0, b = 1) => {
   return Math.floor(lower + Math.random() * (upper - lower + 1));
 };
 
-// const humanizePointDate = (date) => dayjs(date).format('D MMMM');
-
-const getRandomValue = (items) =>
-  items[getRandomInteger(0, items.length-1)];
+const getRandomValue = (items) => items[getRandomInteger(0, items.length - 1)];
 
 const humanizePointTime = (date) => dayjs(date).format('HH:mm');
+const dateAndTime = (date) => dayjs(date).format('DD/MM/YYYY HH:mm');
 
-const robotizeDate = (date) => dayjs(date).format('YYYY-MM-DD');
-const robotizeDateAndTime = (date) => dayjs(date).format('DD/MM/YYYY HH:mm');
+const getEventTitle = (destination, pointType) => {
+  const destinationName = destination.name;
+  const eventType = pointType.charAt(0).toUpperCase() + pointType.slice(1);
+  return `${eventType} ${destinationName}`;
+};
 
-export {getRandomValue, getRandomInteger, humanizePointTime, robotizeDateAndTime};
+export {getRandomValue, getRandomInteger, humanizePointTime, dateAndTime, getEventTitle};

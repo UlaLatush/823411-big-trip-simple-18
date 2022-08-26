@@ -1,38 +1,32 @@
 import {createElement} from '../render.js';
-import {humanizePointTime, robotizeDateAndTime} from '../utils.js';
-import {offers} from '../mock/offer-mock';
-import {getDestinations} from '../mock/destination-mock.js';
+import {dateAndTime, getEventTitle} from '../utils.js';
 
 
 const createEventEditTemplate = (point) => {
+
   const {dateFrom, dateTo, destination, basePrice, type, offers, allOffers} = point;
-  const eventTitle = type.charAt(0).toUpperCase() + type.slice(1) + ' ' + destination.name;
-  const dateFromTime = robotizeDateAndTime(dateFrom);
-  const dateToTime = robotizeDateAndTime(dateTo);
+
+  const eventTitle = getEventTitle(destination, type);
+
+  const dateFromTime = dateAndTime(dateFrom);
+  const dateToTime = dateAndTime(dateTo);
   const descriptionText = destination.description;
   const pictures = destination.pictures;
 
-  let offersList = allOffers.map(({id, title, price}) => {
+  const offersList = allOffers.map(({id, title, price}) => {
 
-    const offerNameArray = title.split(' ');
-    const offerName = offerNameArray.pop();
-    let isChecked = offers.find(offer => {
-      return offer.id === id
-    });
+    const offerName = title.split(' ').pop();
+    const checked = offers.find((offer) => offer.id === id) ? 'checked' : '';
 
-    let checked = isChecked ? 'checked' : '';
-
-
-    return  '<div class="event__offer-selector">\n' +
-    '<input class="event__offer-checkbox  visually-hidden" id="event-offer-' + offerName + '-1" type="checkbox" name="event-offer-' + offerName + '" ' + checked + '>\n        ' +
-    '  <label class="event__offer-label" for="event-offer-' + offerName + '-1">\n' +
-    ' <span class="event__offer-title">' + title + '</span>\n' +
-    '&plus;&euro;&nbsp;\n' +
-    '<span class="event__offer-price">' + price + '</span>\n' +
-    '</label>\n</div>'
-    ;}).join('');
-
-
+    return (`
+      <div class="event__offer-selector">
+        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offerName}-1" type="checkbox" name="event-offer-${offerName}" ${checked}>
+        <label class="event__offer-label" for="event-offer-${offerName}-1">
+          <span class="event__offer-title">${title}</span>&plus;&euro;&nbsp;<span class="event__offer-price">${price}</span>
+        </label>
+      </div>
+    `);
+  }).join('');
 
   return (`
 <li class="trip-events__item">
@@ -139,7 +133,7 @@ const createEventEditTemplate = (point) => {
 </form>
 </li>
 `);
-}
+};
 
 
 export default class EventEditView {

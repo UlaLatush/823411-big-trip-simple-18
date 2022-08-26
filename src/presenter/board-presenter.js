@@ -14,8 +14,6 @@ export default class BoardPresenter {
     this.pointModel = pointModel;
     this.boardPoints = [...this.pointModel.getPoints()];
 
-    console.log(this.boardPoints);
-
     render(new SortView(), this.boardContainer);
     render(this.tripList, this.boardContainer);
     render(new EventNewView(), this.tripList.getElement());

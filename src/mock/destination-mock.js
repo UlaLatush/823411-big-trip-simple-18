@@ -88,6 +88,6 @@ const destinations = [
 
 const getDestinations = () => destinations;
 
-const getDestinationById = (id) => destinations.find(destination => { return destination.id === id; });
+const getDestinationById = (id) => destinations.find((destination) => destination.id === id );
 
-export {getDestinations, getDestinationById}
+export { getDestinations, getDestinationById };

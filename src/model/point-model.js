@@ -9,7 +9,7 @@ export default class PointModel {
     return points.map((point) => ({
       ...point,
       destination: getDestinationById(point.destination),
-      offers: point.offers.map((offer) => { return getOfferById(offer); }),
+      offers: point.offers.map((offer) => getOfferById(offer)),
       allOffers: getOffers()
     }));
   }

@@ -16,8 +16,6 @@ export const generatePoint = () => {
     offers: getOffersByType(pointType),
     type: pointType,
   });
-}
+};
 
 export const generatePoints = () => Array.from({length: POINT_COUNT}, generatePoint);
-
-
