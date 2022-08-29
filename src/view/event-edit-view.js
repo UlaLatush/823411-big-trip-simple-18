@@ -1,22 +1,25 @@
 import {createElement} from '../render.js';
-import {dateAndTime, getEventTitle} from '../utils.js';
+import {dateAndTime, getEventTitle, getDestinationById, getAvailableOffersByType} from '../utils.js';
 
 
-const createEventEditTemplate = (point) => {
+const createEventEditTemplate = (point, destinations, offersByType) => {
 
-  const {dateFrom, dateTo, destination, basePrice, type, offers, allOffers} = point;
+  const {dateFrom, dateTo, destination, basePrice, type, offers} = point;
 
-  const eventTitle = getEventTitle(destination, type);
+  const destinationObj = getDestinationById(destinations, destination);
+  const availableOffers = getAvailableOffersByType(offersByType, type);
+
+  const eventTitle = getEventTitle(destinationObj, type);
 
   const dateFromTime = dateAndTime(dateFrom);
   const dateToTime = dateAndTime(dateTo);
-  const descriptionText = destination.description;
-  const pictures = destination.pictures;
+  const descriptionText = destinationObj.description;
+  const pictures = destinationObj.pictures;
 
-  const offersList = allOffers.map(({id, title, price}) => {
+  const offersList = availableOffers.map(({id, title, price}) => {
 
     const offerName = title.split(' ').pop();
-    const checked = offers.find((offer) => offer.id === id) ? 'checked' : '';
+    const checked = offers.find((e) => e === id) ? 'checked' : '';
 
     return (`
       <div class="event__offer-selector">
@@ -138,12 +141,14 @@ const createEventEditTemplate = (point) => {
 
 export default class EventEditView {
 
-  constructor(point) {
+  constructor(point, destinations, offersByType) {
     this.point = point;
+    this.destinations = destinations;
+    this.offersByType = offersByType;
   }
 
   getTemplate() {
-    return createEventEditTemplate(this.point);
+    return createEventEditTemplate(this.point, this.destinations, this.offersByType);
   }
 
   getElement() {

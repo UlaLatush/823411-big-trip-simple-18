@@ -1,11 +1,12 @@
 import {POINT_TYPES, POINT_COUNT} from './const.js';
-import {getRandomValue, getRandomInteger} from '../utils.js';
-import dayjs from 'dayjs';
+import {getRandomValue, getRandomInteger, getSelectedOfferIds} from '../utils.js';
 import {getOffersByType} from './offer-mock';
+import dayjs from 'dayjs';
 
 const generatePointType = () => getRandomValue(POINT_TYPES);
 
 export const generatePoint = () => {
+
   const pointType = generatePointType();
   return ({
     basePrice: getRandomInteger(100, 500),
@@ -13,7 +14,7 @@ export const generatePoint = () => {
     dateTo: dayjs().add(getRandomInteger(1, 3), 'hour').toDate(),
     destination: getRandomInteger(1, 3),
     id: getRandomInteger(1, 5),
-    offers: getOffersByType(pointType),
+    offers: getSelectedOfferIds(getOffersByType(), pointType),
     type: pointType,
   });
 };

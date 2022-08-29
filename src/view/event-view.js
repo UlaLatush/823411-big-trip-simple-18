@@ -1,11 +1,14 @@
 import {createElement} from '../render.js';
-import {humanizePointTime, getEventTitle} from '../utils.js';
+import {humanizePointTime, getEventTitle, getDestinationById, getOfferById} from '../utils.js';
 
-const createEventViewTemplate = (point) => {
+const createEventViewTemplate = (point, destinations, offersByType) => {
+
   const {dateFrom, dateTo, destination, basePrice, type, offers} = point;
 
-  const eventTitle = getEventTitle(destination, type);
+  const destinationObj = getDestinationById(destinations, destination);
 
+
+  const eventTitle = getEventTitle(destinationObj, type);
   const dateFromTime = humanizePointTime(dateFrom);
   const dateToTime = humanizePointTime(dateTo);
 
@@ -13,10 +16,14 @@ const createEventViewTemplate = (point) => {
     ' <span class="event__offer-title">No additional offers</span>';
 
   if (offers.length > 0) {
-    offersList = offers.map(({title, price}) =>
-      `<li class="event__offer">
+    offersList = offers.map((offerId) => {
+      const offerObj = getOfferById(offersByType, type, offerId);
+      const title = offerObj.title;
+      const price = offerObj.price;
+      return (`<li class="event__offer">
         <span class="event__offer-title">${title}</span>&plus; &euro;&nbsp;<span class="event__offer-price">${price}</span>
-      </li>`).join('');
+      </li>`);
+    }).join('');
   }
 
   return (`
@@ -47,18 +54,19 @@ const createEventViewTemplate = (point) => {
           <span class="visually-hidden">Open event</span>
         </button>
       </div>
-    </li>
-    `);
+    </li>`);
 };
 
 export default class EventView {
 
-  constructor(point) {
+  constructor(point, destinations, offersByType) {
     this.point = point;
+    this.destinations = destinations;
+    this.offersByType = offersByType;
   }
 
   getTemplate() {
-    return createEventViewTemplate(this.point);
+    return createEventViewTemplate(this.point, this.destinations, this.offersByType);
   }
 
   getElement() {

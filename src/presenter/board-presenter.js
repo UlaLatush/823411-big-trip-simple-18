@@ -9,19 +9,23 @@ import EventEditView from '../view/event-edit-view.js';
 export default class BoardPresenter {
   tripList = new TripEventsListView();
 
-  init = (boardContainer, pointModel) => {
+  init = (boardContainer, pointModel, destinationModel, offerModel) => {
     this.boardContainer = boardContainer;
+
     this.pointModel = pointModel;
+    this.destinationModel = destinationModel;
+    this.offerModel = offerModel;
+
     this.boardPoints = [...this.pointModel.getPoints()];
+    this.destinations = [...this.destinationModel.getDestinations()];
+    this.offersByType = [...this.offerModel.getOffersByType()];
 
     render(new SortView(), this.boardContainer);
     render(this.tripList, this.boardContainer);
     render(new EventNewView(), this.tripList.getElement());
-    render(new EventEditView(this.boardPoints[0]), this.tripList.getElement());
+    render(new EventEditView(this.boardPoints[0], this.destinations, this.offersByType), this.tripList.getElement());
 
-    for (let i = 1; i < this.boardPoints.length; i++) {
-      render(new EventView(this.boardPoints[i]), this.tripList.getElement());
-    }
+    this.boardPoints.slice(1).forEach((e) => render(new EventView(e, this.destinations, this.offersByType), this.tripList.getElement()));
 
   };
 }

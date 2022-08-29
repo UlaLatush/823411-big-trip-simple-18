@@ -18,4 +18,12 @@ const getEventTitle = (destination, pointType) => {
   return `${eventType} ${destinationName}`;
 };
 
-export {getRandomValue, getRandomInteger, humanizePointTime, dateAndTime, getEventTitle};
+const getDestinationById = (destinations, id) => destinations.find((destination) => destination.id === id);
+
+const getAvailableOffersByType = (offersByType, pointType) => offersByType.find((e) => e.type === pointType).offers;
+
+const getOfferById = (offersByType, pointType, offerId) => getAvailableOffersByType(offersByType, pointType).find((e) => e.id === offerId);
+
+const getSelectedOfferIds = (offersByPoint, pointType) => getAvailableOffersByType(offersByPoint, pointType).filter((e) => e.id % 2 === 0).map((e) => e.id);
+
+export {getRandomValue, getRandomInteger, humanizePointTime, dateAndTime, getEventTitle, getDestinationById, getAvailableOffersByType, getSelectedOfferIds, getOfferById};

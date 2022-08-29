@@ -1,7 +1,7 @@
 import {getRandomInteger} from '../utils.js';
 import {POINT_TYPES} from '../mock/const.js';
 
-export const offers = [
+const offers = [
   {
     id: 1,
     title: 'Add luggage',
@@ -32,19 +32,19 @@ export const offers = [
 const offersByType = [
   {
     type: POINT_TYPES[0],
-    offers: [1,3,5]
+    offers: [offers[0], offers[2], offers[4]]
   },
   {
     type: POINT_TYPES[1],
-    offers: [1,3,4]
+    offers: [offers[0], offers[2], offers[3]]
   },
   {
     type: POINT_TYPES[2],
-    offers: [1,5]
+    offers: [offers[0], offers[4]]
   },
   {
     type: POINT_TYPES[3],
-    offers: [1,2,4,5]
+    offers: [offers[0], offers[1], offers[3], offers[4]]
   },
   {
     type: POINT_TYPES[4],
@@ -52,11 +52,11 @@ const offersByType = [
   },
   {
     type: POINT_TYPES[5],
-    offers: [1,4,5]
+    offers: [offers[0], offers[3], offers[4]]
   },
   {
     type: POINT_TYPES[6],
-    offers: [1, 2, 3, 5]
+    offers: [offers[0], offers[1], offers[2], offers[4]]
   },
   {
     type: POINT_TYPES[7],
@@ -64,14 +64,10 @@ const offersByType = [
   },
   {
     type: POINT_TYPES[8],
-    offers: [2,4,5]
+    offers: [offers[1], offers[3], offers[4]]
   }
 ];
 
-const getOffers = () => offers;
+const getOffersByType = () => offersByType;
 
-const getOffersByType = (type) => offersByType.find( (offer) => offer.type === type).offers;
-
-const getOfferById = (id) => offers.find((offer) => offer.id === id);
-
-export {getOffers, getOfferById, getOffersByType};
+export {getOffersByType};
