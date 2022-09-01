@@ -2,7 +2,9 @@ import {getDestinations} from '../mock/destination-mock.js';
 
 export default class DestinationModel {
 
-  getDestinations() {
-    return getDestinations();
+  #destinations = getDestinations();
+
+  get destinations() {
+    return this.#destinations;
   }
 }
