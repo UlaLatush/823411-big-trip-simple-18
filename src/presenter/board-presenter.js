@@ -3,6 +3,7 @@ import EventView from '../view/event-view.js';
 import SortView from '../view/sort-view.js';
 import TripEventsListView from '../view/trip-events-list-view';
 import EventEditView from '../view/event-edit-view.js';
+import EmptyListView from '../view/empty-list';
 
 
 export default class BoardPresenter {
@@ -24,10 +25,15 @@ export default class BoardPresenter {
     this.destinations = [...this.#destinationModel.destinations];
     this.offersByType = [...this.#offerModel.offersByType];
 
-    render(new SortView(), this.#boardContainer);
-    render(this.#tripList, this.#boardContainer);
+    if (this.boardPoints .length === 0) {
+      render(new EmptyListView(), this.#boardContainer);
+    } else {
+      render(new SortView(), this.#boardContainer);
+      render(this.#tripList, this.#boardContainer);
 
-    this.boardPoints.forEach((e) => (this.#renderPoint(e)));
+      this.boardPoints.forEach((e) => (this.#renderPoint(e)));
+    }
+
   };
 
   #renderPoint = (point) => {
