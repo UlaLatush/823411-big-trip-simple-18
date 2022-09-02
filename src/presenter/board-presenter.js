@@ -2,7 +2,6 @@ import {render} from '../render.js';
 import EventView from '../view/event-view.js';
 import SortView from '../view/sort-view.js';
 import TripEventsListView from '../view/trip-events-list-view';
-// import EventNewView from '../view/event-new-view.js';
 import EventEditView from '../view/event-edit-view.js';
 
 
@@ -21,14 +20,12 @@ export default class BoardPresenter {
     this.#destinationModel = destinationModel;
     this.#offerModel = offerModel;
 
-    this.boardPoints = [...this.#pointModel.point];
+    this.boardPoints = [...this.#pointModel.points];
     this.destinations = [...this.#destinationModel.destinations];
     this.offersByType = [...this.#offerModel.offersByType];
 
     render(new SortView(), this.#boardContainer);
     render(this.#tripList, this.#boardContainer);
-    // render(new EventNewView(), this.#tripList.element);
-    // render(new EventEditView(this.boardPoints[0], this.destinations, this.offersByType), this.#tripList.element);
 
     this.boardPoints.forEach((e) => (this.#renderPoint(e)));
   };
@@ -53,14 +50,12 @@ export default class BoardPresenter {
       }
     };
 
-    const eventRollUpBtn = pointComponent.element.querySelector('.event__rollup-btn');
-    eventRollUpBtn.addEventListener('click', () => {
+    pointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
       replaceViewToEditForm();
       document.addEventListener('keydown', onEscKeyDown);
     });
 
-    const eventRollDownBtn = editPointComponent.element.querySelector('.event__rollup-btn');
-    eventRollDownBtn.addEventListener('click', () => {
+    editPointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
       replaceEditFormToView();
     });
 
