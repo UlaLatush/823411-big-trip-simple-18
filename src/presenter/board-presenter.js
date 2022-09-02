@@ -2,7 +2,7 @@ import {render} from '../render.js';
 import EventView from '../view/event-view.js';
 import SortView from '../view/sort-view.js';
 import TripEventsListView from '../view/trip-events-list-view';
-import EventNewView from '../view/event-new-view.js';
+// import EventNewView from '../view/event-new-view.js';
 import EventEditView from '../view/event-edit-view.js';
 
 
@@ -65,6 +65,6 @@ export default class BoardPresenter {
     });
 
     render(pointComponent, this.#tripList.element);
-  }
+  };
 
 }
