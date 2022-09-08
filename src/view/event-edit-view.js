@@ -1,4 +1,4 @@
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import {dateAndTime, getEventTitle, getDestinationById, getAvailableOffersByType} from '../utils.js';
 
 
@@ -139,11 +139,10 @@ const createEventEditTemplate = (point, destinations, offersByType) => {
 };
 
 
-export default class EventEditView {
-
-  #element = null;
+export default class EventEditView extends AbstractView {
 
   constructor(point, destinations, offersByType) {
+    super();
     this.point = point;
     this.destinations = destinations;
     this.offersByType = offersByType;
@@ -153,15 +152,33 @@ export default class EventEditView {
     return createEventEditTemplate(this.point, this.destinations, this.offersByType);
   }
 
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
+  setClosePointHandler = (callback) => {
+    this._callback.close = callback;
+    this.element.addEventListener('click', this.#closePointHandler);
+  };
 
-    return this.#element;
-  }
+  #closePointHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.close();
+  };
 
-  removeElement() {
-    this.#element = null;
-  }
+  setSavePointHandler = (callback) => {
+    this._callback.save = callback;
+    this.element.addEventListener('click', this.#savePointHandler);
+  };
+
+  #savePointHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.save();
+  };
+
+  setDeletePointHandler = (callback) => {
+    this._callback.delete = callback;
+    this.element.addEventListener('click', this.#deletePointHandler);
+  };
+
+  #deletePointHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.delete();
+  };
 }

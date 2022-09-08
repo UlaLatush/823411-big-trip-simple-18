@@ -1,4 +1,4 @@
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import {humanizePointTime, getEventTitle, getDestinationById, getOfferById} from '../utils.js';
 
 const createEventViewTemplate = (point, destinations, offersByType) => {
@@ -57,10 +57,10 @@ const createEventViewTemplate = (point, destinations, offersByType) => {
     </li>`);
 };
 
-export default class EventView {
-  #element = null;
+export default class EventView extends AbstractView {
 
   constructor(point, destinations, offersByType) {
+    super();
     this.point = point;
     this.destinations = destinations;
     this.offersByType = offersByType;
@@ -70,15 +70,13 @@ export default class EventView {
     return createEventViewTemplate(this.point, this.destinations, this.offersByType);
   }
 
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
+  setEditPointHandler = (callback) => {
+    this._callback.edit = callback;
+    this.element.addEventListener('click', this.#editPointHandler);
+  };
 
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
-  }
+  #editPointHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.edit();
+  };
 }
