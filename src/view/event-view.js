@@ -73,10 +73,10 @@ export default class EventView extends AbstractView {
   setEditPointHandler = (callback) => {
     this._callback.edit = callback;
     this.element.addEventListener('click', this.#editPointHandler);
-  }
+  };
 
   #editPointHandler = (evt) => {
     evt.preventDefault();
     this._callback.edit();
-  }
+  };
 }

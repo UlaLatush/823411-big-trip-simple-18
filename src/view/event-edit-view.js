@@ -155,30 +155,30 @@ export default class EventEditView extends AbstractView {
   setClosePointHandler = (callback) => {
     this._callback.close = callback;
     this.element.addEventListener('click', this.#closePointHandler);
-  }
+  };
 
   #closePointHandler = (evt) => {
     evt.preventDefault();
     this._callback.close();
-  }
+  };
 
   setSavePointHandler = (callback) => {
     this._callback.save = callback;
     this.element.addEventListener('click', this.#savePointHandler);
-  }
+  };
 
   #savePointHandler = (evt) => {
     evt.preventDefault();
     this._callback.save();
-  }
+  };
 
   setDeletePointHandler = (callback) => {
     this._callback.delete = callback;
     this.element.addEventListener('click', this.#deletePointHandler);
-  }
+  };
 
   #deletePointHandler = (evt) => {
     evt.preventDefault();
     this._callback.delete();
-  }
+  };
 }
