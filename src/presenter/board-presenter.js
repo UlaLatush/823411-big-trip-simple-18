@@ -3,7 +3,7 @@ import EventView from '../view/event-view.js';
 import SortView from '../view/sort-view.js';
 import TripEventsListView from '../view/trip-events-list-view';
 import EventEditView from '../view/event-edit-view.js';
-import EmptyListView from '../view/empty-list';
+import EmptyListView from '../view/empty-list-view';
 
 
 export default class BoardPresenter {
@@ -56,12 +56,20 @@ export default class BoardPresenter {
       }
     };
 
-    pointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+    pointComponent.setEditPointHandler(() => {
       replaceViewToEditForm();
       document.addEventListener('keydown', onEscKeyDown);
     });
 
-    editPointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+    editPointComponent.setClosePointHandler(() => {
+      replaceEditFormToView();
+    });
+
+    editPointComponent.setSavePointHandler(() => {
+      replaceEditFormToView();
+    });
+
+    editPointComponent.setDeletePointHandler(() => {
       replaceEditFormToView();
     });
 
