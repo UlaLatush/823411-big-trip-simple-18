@@ -20,7 +20,7 @@ export default class EventPresenter {
   init = (point) => {
     this.#point = point;
     this.#renderPoint(point);
-  }
+  };
 
   #renderPoint = (point) => {
     const pointComponent = new EventView(point, this.#destinations, this.#offersByType);

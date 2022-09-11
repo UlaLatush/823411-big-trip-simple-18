@@ -39,7 +39,7 @@ export default class BoardPresenter {
       this.#eventPresenter = new EventPresenter(this.#tripList, this.destinations, this.offersByType);
     }
     this.#eventPresenter.init(point);
-  }
+  };
 
   #renderEmptyList = () => {
     render(new EmptyListView(), this.#boardContainer);
@@ -51,5 +51,5 @@ export default class BoardPresenter {
 
   #renderTripList = () => {
     render(this.#tripList, this.#boardContainer);
-  }
+  };
 }
