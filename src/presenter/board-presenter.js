@@ -13,6 +13,7 @@ export default class BoardPresenter {
   #destinationModel = null;
   #offerModel = null;
   #eventPresenter = null;
+  #sortComponent = new SortView();
 
   init = (boardContainer, pointModel, destinationModel, offerModel) => {
     this.#boardContainer = boardContainer;
@@ -25,10 +26,11 @@ export default class BoardPresenter {
     this.offersByType = [...this.#offerModel.offersByType];
 
     if (this.boardPoints.length === 0) {
-      this.#renderEmptyList();
+      render(new EmptyListView(), this.#boardContainer);
+      render(new EmptyListView(), this.#boardContainer);
     } else {
-      this.#renderSort();
-      this.#renderTripList();
+      render(this.#sortComponent, this.#boardContainer);
+      render(this.#tripList, this.#boardContainer);
 
       this.boardPoints.forEach((e) => (this.#renderPoint(e)));
     }
@@ -41,15 +43,4 @@ export default class BoardPresenter {
     this.#eventPresenter.init(point);
   };
 
-  #renderEmptyList = () => {
-    render(new EmptyListView(), this.#boardContainer);
-  };
-
-  #renderSort = () => {
-    render(new SortView(), this.#boardContainer);
-  };
-
-  #renderTripList = () => {
-    render(this.#tripList, this.#boardContainer);
-  };
 }

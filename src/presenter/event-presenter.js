@@ -34,11 +34,6 @@ export default class EventPresenter {
       this.#tripList.element.replaceChild(pointComponent.element, editPointComponent.element);
     };
 
-    const rememberPrevComponents = () => {
-      this.#prevPointComponent = pointComponent;
-      this.#prevEditPointComponent = editPointComponent;
-    };
-
     const clearPrevComponents = () => {
       this.#prevPointComponent = null;
       this.#prevEditPointComponent = null;
@@ -63,7 +58,8 @@ export default class EventPresenter {
         replacePrevEditFormToView();
       }
 
-      rememberPrevComponents();
+      this.#prevPointComponent = pointComponent;
+      this.#prevEditPointComponent = editPointComponent;
       document.addEventListener('keydown', onEscKeyDown);
     });
 
