@@ -27,7 +27,6 @@ export default class BoardPresenter {
 
     if (this.boardPoints.length === 0) {
       render(new EmptyListView(), this.#boardContainer);
-      render(new EmptyListView(), this.#boardContainer);
     } else {
       render(this.#sortComponent, this.#boardContainer);
       render(this.#tripList, this.#boardContainer);
