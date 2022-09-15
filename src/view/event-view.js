@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import {humanizePointTime, getEventTitle, getDestinationById, getOfferById} from '../utils.js';
+import {humanizePointDate, humanizePointTime, getEventTitle, getDestinationById, getOfferById} from '../utils.js';
 
 const createEventViewTemplate = (point, destinations, offersByType) => {
 
@@ -9,6 +9,7 @@ const createEventViewTemplate = (point, destinations, offersByType) => {
 
 
   const eventTitle = getEventTitle(destinationObj, type);
+  const dateFromDayMonth = humanizePointDate(dateFrom);
   const dateFromTime = humanizePointTime(dateFrom);
   const dateToTime = humanizePointTime(dateTo);
 
@@ -29,7 +30,7 @@ const createEventViewTemplate = (point, destinations, offersByType) => {
   return (`
     <li class="trip-events__item">
       <div class="event">
-        <time class="event__date" datetime="2019-03-18">MAR 18</time>
+        <time class="event__date" datetime="2019-03-18">${dateFromDayMonth}</time>
         <div class="event__type">
           <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
         </div>

@@ -2,4 +2,10 @@ const POINT_TYPES = ['taxi','bus','train','ship','drive','flight','check-in', 's
 
 const POINT_COUNT = 4;
 
-export {POINT_TYPES, POINT_COUNT};
+const SortType = {
+  DAY: 'day',
+  PRICE: 'price',
+  DEFAULT: 'day'
+};
+
+export {POINT_TYPES, POINT_COUNT, SortType};
