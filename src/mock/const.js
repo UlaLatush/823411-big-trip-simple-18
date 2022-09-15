@@ -4,8 +4,7 @@ const POINT_COUNT = 4;
 
 const SortType = {
   DAY: 'day',
-  PRICE: 'price',
-  DEFAULT: 'day'
+  PRICE: 'price'
 };
 
 export {POINT_TYPES, POINT_COUNT, SortType};

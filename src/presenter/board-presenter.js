@@ -36,7 +36,7 @@ export default class BoardPresenter {
       this.#renderSort();
       render(this.#tripList, this.#boardContainer);
 
-      this.#sortPoints(SortType.DEFAULT);
+      this.#sortPoints(SortType.DAY);
       this.#renderPoints();
     }
   };
@@ -60,7 +60,8 @@ export default class BoardPresenter {
   };
 
   #handlerSortTypeChange = (sortType) => {
-    if (this.#currentSortType === sortType) {
+    console.log(sortType);
+    if (sortType === undefined || this.#currentSortType === sortType ) {
       return;
     }
 
