@@ -10,8 +10,8 @@ export const generatePoint = () => {
   const pointType = generatePointType();
   return ({
     basePrice: getRandomInteger(100, 500),
-    dateFrom: dayjs().subtract(getRandomInteger(1, 3), 'hour').toDate(),
-    dateTo: dayjs().add(getRandomInteger(1, 3), 'hour').toDate(),
+    dateFrom: dayjs().subtract(getRandomInteger(1, 5), 'day').subtract(getRandomInteger(1, 3), 'hour').toDate(),
+    dateTo: dayjs().add(getRandomInteger(1, 5), 'day').add(getRandomInteger(1, 3), 'hour').toDate(),
     destination: getRandomInteger(1, 3),
     id: getRandomInteger(1, 5),
     offers: getSelectedOfferIds(getOffersByType(), pointType),

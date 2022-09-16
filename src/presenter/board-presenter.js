@@ -3,17 +3,21 @@ import SortView from '../view/sort-view.js';
 import TripEventsListView from '../view/trip-events-list-view';
 import EmptyListView from '../view/empty-list-view';
 import EventPresenter from './event-presenter';
+import {SortType} from '../mock/const.js';
+import {sortByPrice, sortByDate} from '../utils.js';
 
 export default class BoardPresenter {
 
   #tripList = new TripEventsListView();
-
   #boardContainer = null;
   #pointModel = null;
   #destinationModel = null;
   #offerModel = null;
-  #eventPresenter = null;
   #sortComponent = new SortView();
+  #currentSortType = SortType.DEFAULT;
+  #sourcedBoardPoints = [];
+  #eventPresenter = null;
+  #boardPoints = [];
 
   init = (boardContainer, pointModel, destinationModel, offerModel) => {
     this.#boardContainer = boardContainer;
@@ -21,18 +25,53 @@ export default class BoardPresenter {
     this.#destinationModel = destinationModel;
     this.#offerModel = offerModel;
 
-    this.boardPoints = [...this.#pointModel.points];
+    this.#sourcedBoardPoints = [...this.#pointModel.points];
+    this.#boardPoints = [...this.#pointModel.points];
     this.destinations = [...this.#destinationModel.destinations];
     this.offersByType = [...this.#offerModel.offersByType];
 
-    if (this.boardPoints.length === 0) {
+    if (this.#boardPoints.length === 0) {
       render(new EmptyListView(), this.#boardContainer);
     } else {
-      render(this.#sortComponent, this.#boardContainer);
+      this.#renderSort();
       render(this.#tripList, this.#boardContainer);
 
-      this.boardPoints.forEach((e) => (this.#renderPoint(e)));
+      this.#sortPoints(SortType.DAY);
+      this.#renderPoints();
     }
+  };
+
+  #renderPoints = () => {
+    this.#boardPoints.forEach((e) => (this.#renderPoint(e)));
+  };
+
+  #sortPoints = (sortType) => {
+    switch (sortType) {
+      case SortType.DAY:
+        sortByDate(this.#boardPoints);
+        break;
+      case SortType.PRICE:
+        sortByPrice(this.#boardPoints);
+        break;
+      default:
+        this.#boardPoints = [...this.#sourcedBoardPoints];
+    }
+    this.#currentSortType = sortType;
+  };
+
+  #handlerSortTypeChange = (sortType) => {
+    if (sortType === undefined || this.#currentSortType === sortType ) {
+      return;
+    }
+
+    this.#sortPoints(sortType);
+    this.#eventPresenter.clearOpenedViews();
+    this.#renderPoints();
+  };
+
+  #renderSort = () => {
+    render(this.#sortComponent, this.#boardContainer);
+    this.#sortComponent.setSortTypeChangeHandler(this.#handlerSortTypeChange);
   };
 
   #renderPoint = (point) => {

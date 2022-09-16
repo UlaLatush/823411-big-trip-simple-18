@@ -1,4 +1,4 @@
-import {render} from '../render.js';
+import {render, remove} from '../render.js';
 import EventView from '../view/event-view.js';
 import EventEditView from '../view/event-edit-view.js';
 
@@ -10,6 +10,7 @@ export default class EventPresenter {
   #offersByType = null;
   #prevPointComponent = null;
   #prevEditPointComponent = null;
+  #openedViews = [];
 
   constructor(tripList, destinations, offersByType) {
     this.#tripList = tripList;
@@ -22,9 +23,14 @@ export default class EventPresenter {
     this.#renderPoint(point);
   };
 
+  clearOpenedViews = () => {
+    this.#openedViews.forEach((e) => (remove(e)));
+  };
+
   #renderPoint = (point) => {
     const pointComponent = new EventView(point, this.#destinations, this.#offersByType);
     const editPointComponent = new EventEditView(point, this.#destinations, this.#offersByType);
+    this.#openedViews.push(pointComponent, editPointComponent);
 
     const replaceViewToEditForm = () => {
       this.#tripList.element.replaceChild(editPointComponent.element, pointComponent.element);
