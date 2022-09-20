@@ -29,10 +29,13 @@ const sortByDate = (points) => {
 
 const getDestinationById = (destinations, id) => destinations.find((destination) => destination.id === id);
 
+const getDestinationIdByName = (destinations, name) => destinations.find((destination) => destination.name === name).id;
+
+
 const getAvailableOffersByType = (offersByType, pointType) => offersByType.find((e) => e.type === pointType).offers;
 
 const getOfferById = (offersByType, pointType, offerId) => getAvailableOffersByType(offersByType, pointType).find((e) => e.id === offerId);
 
 const getSelectedOfferIds = (offersByPoint, pointType) => getAvailableOffersByType(offersByPoint, pointType).filter((e) => e.id % 2 === 0).map((e) => e.id);
 
-export {humanizePointDate, sortByDate, sortByPrice, getRandomValue, getRandomInteger, humanizePointTime, dateAndTime, getEventTitle, getDestinationById, getAvailableOffersByType, getSelectedOfferIds, getOfferById};
+export {getDestinationIdByName, humanizePointDate, sortByDate, sortByPrice, getRandomValue, getRandomInteger, humanizePointTime, dateAndTime, getEventTitle, getDestinationById, getAvailableOffersByType, getSelectedOfferIds, getOfferById};
