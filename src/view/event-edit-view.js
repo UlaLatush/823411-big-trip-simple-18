@@ -132,6 +132,7 @@ export default class EventEditView extends AbstractStatefulView {
   constructor(point, destinations, offersByType) {
     super();
     this._state = EventEditView.parsePointToState(point);
+    this.point = point;
     this.destinations = destinations;
     this.offersByType = offersByType;
     this.#setChangePointType();
@@ -178,6 +179,7 @@ export default class EventEditView extends AbstractStatefulView {
 
   #closePointHandler = (evt) => {
     evt.preventDefault();
+    this.updateElement(this.point);
     this._callback.close();
   };
 

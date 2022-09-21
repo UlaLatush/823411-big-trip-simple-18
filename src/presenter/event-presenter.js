@@ -58,6 +58,7 @@ export default class EventPresenter {
     };
 
     pointComponent.setEditPointHandler(() => {
+
       replaceViewToEditForm();
 
       if(this.#prevEditPointComponent !== null && this.#prevPointComponent !== null) {
@@ -66,6 +67,7 @@ export default class EventPresenter {
 
       this.#prevPointComponent = pointComponent;
       this.#prevEditPointComponent = editPointComponent;
+
       document.addEventListener('keydown', onEscKeyDown);
     });
 
