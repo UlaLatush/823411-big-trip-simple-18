@@ -1,6 +1,8 @@
 import {dateAndTime, getDestinationById, getAvailableOffersByType, getDestinationIdByName} from '../utils.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import {POINT_TYPES} from '../mock/const.js';
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
 
 
 const createEventEditTemplate = (point, destinations, offersByType) => {
@@ -128,6 +130,8 @@ const createEventEditTemplate = (point, destinations, offersByType) => {
 
 
 export default class EventEditView extends AbstractStatefulView {
+  #datepickerStart = null;
+  #datepickerEnd = null;
 
   constructor(point, destinations, offersByType) {
     super();
@@ -137,6 +141,7 @@ export default class EventEditView extends AbstractStatefulView {
     this.offersByType = offersByType;
     this.#setChangePointType();
     this.#setChangeDestination();
+    this.#setDatePicker();
   }
 
   get template() {
@@ -148,6 +153,62 @@ export default class EventEditView extends AbstractStatefulView {
   });
 
   static parseStateToPoint = (state) => ({...state});
+
+  removeElement() {
+    super.removeElement();
+    if (this.#datepickerStart) {
+      this.#datepickerEnd = null;
+    }
+    if (this.#datepickerEnd) {
+      this.#datepickerStart = null;
+    }
+  }
+
+  #setDateStartPicker = () => {
+    if (this._state.dateFrom) {
+      this.#datepickerStart = flatpickr(
+        this.element.querySelectorAll('.event__input--time')[0],
+        {
+          enableTime: true,
+          dateFormat: 'd/m/y / h:i',
+          defaultDate: this._state.dateFrom,
+          onChange: this.#dueDateStartChangeHandler
+        }
+      );
+    }
+  };
+
+  #setDateEndPicker = () => {
+    if (this._state.dateTo) {
+      this.#datepickerEnd = flatpickr(
+        this.element.querySelectorAll('.event__input--time')[1],
+        {
+          enableTime: true,
+          dateFormat: 'd/m/y / h:i',
+          defaultDate: this._state.dateTo,
+          onChange: this.#dueDateEndChangeHandler,
+        }
+      );
+    }
+  };
+
+
+  #dueDateStartChangeHandler = (dateFrom) => {
+    this.updateElement({
+      dateFrom: dateFrom
+    });
+  };
+
+  #dueDateEndChangeHandler = (dateTo) => {
+    this.updateElement({
+      dateTo: dateTo
+    });
+  };
+
+  #setDatePicker = () => {
+    this.#setDateStartPicker();
+    this.#setDateEndPicker();
+  };
 
   #setChangePointType = () => {
     this.element.querySelectorAll('.event__type-input').forEach((element) => element.addEventListener('click', this.#selectPointTypeHandler));
@@ -209,5 +270,6 @@ export default class EventEditView extends AbstractStatefulView {
     this.setSavePointHandler(this._callback.save);
     this.setDeletePointHandler(this._callback.delete);
     this.#setChangeDestination();
+    this.#setDatePicker();
   };
 }
