@@ -80,23 +80,23 @@ export default class EventPresenter {
       clearPrevComponents();
     });
 
-    editPointComponent.setSavePointHandler((point) => {
+    editPointComponent.setSavePointHandler((update) => {
       replaceEditFormToView();
       clearPrevComponents();
       this.#changeData(
         UserAction.UPDATE_POINT,
         UpdateType.MINOR,
-        point
+        update
       );
     });
 
-    editPointComponent.setDeletePointHandler((point) => {
+    editPointComponent.setDeletePointHandler((update) => {
       replaceEditFormToView();
       clearPrevComponents();
       this.#changeData(
         UserAction.DELETE_POINT,
         UpdateType.MINOR,
-        point
+        update
       );
     });
 

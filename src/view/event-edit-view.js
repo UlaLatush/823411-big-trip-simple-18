@@ -287,15 +287,12 @@ export default class EventEditView extends AbstractStatefulView {
 
   #setSelectOfferHandler = () => {
     this.element.querySelectorAll('.event__offer-checkbox').forEach((checkbox) => checkbox.addEventListener('click', this.#selectOfferHandler));
-  }
+  };
 
   #selectOfferHandler = (evt) => {
     evt.preventDefault();
     let offers = [...this._state.offers];
-    console.log(offers);
     const offerId = Number((evt.target.id.slice(-1)));
-    console.log(offerId);
-
 
     if (evt.target.checked) {
       const offersByType = this.offersByType.find((item) => item.type === this._state.type).offers;
@@ -312,7 +309,7 @@ export default class EventEditView extends AbstractStatefulView {
 
   #setChangePriceHandler = () => {
     this.element.querySelector('.event__input--price').addEventListener('input', this.#changePriceHandler);
-  }
+  };
 
   #changePriceHandler = (evt) => {
     evt.preventDefault();

@@ -47,8 +47,7 @@ export default class BoardPresenter {
     this.#eventNewButtonComponent = new EventNewButtonView();
     this.#eventNewButtonComponent.setClickHandler(this.createPoint);
 
-    this.#eventNewPresenter = new EventNewPresenter(this.#tripList, this.destinations, this.offersByType,
-                                    this.#handleViewAction, this.#eventNewButtonComponent);
+    this.#eventNewPresenter = new EventNewPresenter(this.#tripList, this.destinations, this.offersByType, this.#handleViewAction, this.#eventNewButtonComponent);
 
     this.#renderBoard();
     this.#renderEventNewButton();
@@ -61,11 +60,11 @@ export default class BoardPresenter {
 
     switch (this.#currentSortType) {
       case SortType.DAY:
-         sortByDate(filteredPoints);
-         break;
+        sortByDate(filteredPoints);
+        break;
       case SortType.PRICE:
-         sortByPrice(filteredPoints);
-         break;
+        sortByPrice(filteredPoints);
+        break;
     }
     return filteredPoints;
   }
@@ -131,7 +130,7 @@ export default class BoardPresenter {
     if (resetSortType) {
       this.#currentSortType = SortType.DAY;
     }
-  }
+  };
 
   #renderBoard = () => {
 
