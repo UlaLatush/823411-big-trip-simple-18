@@ -3,7 +3,7 @@ import {FilterType} from '../mock/const.js';
 
 export default class FilterModel extends Observable {
 
-  #filter = FilterType.everything;
+  #filter = FilterType.all;
 
   get filter() {
     return this.#filter;

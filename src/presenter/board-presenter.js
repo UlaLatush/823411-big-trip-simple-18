@@ -23,7 +23,7 @@ export default class BoardPresenter {
 
   #eventNewButtonComponent = null;
 
-  #filterType = FilterType.everything;
+  #filterType = FilterType.all;
   #currentSortType = SortType.DAY;
   #eventPresenter = null;
   #eventNewPresenter = null;
@@ -71,7 +71,7 @@ export default class BoardPresenter {
 
   createPoint = () => {
     this.#currentSortType = SortType.DAY;
-    this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.everything);
+    this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.all);
     this.#eventNewPresenter.init();
   };
 

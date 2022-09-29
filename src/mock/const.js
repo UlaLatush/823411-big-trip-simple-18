@@ -9,7 +9,7 @@ const SortType = {
 };
 
 const FilterType = {
-  everything: 'everything',
+  all: 'all',
   future: 'future',
   past: 'past'
 };

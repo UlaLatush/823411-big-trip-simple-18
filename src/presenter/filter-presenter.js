@@ -26,9 +26,9 @@ export default class FilterPresenter {
 
     return [
       {
-        type: FilterType.everything,
+        type: FilterType.all,
         name: 'everything',
-        count: filter[FilterType.everything](points).length,
+        count: filter[FilterType.all](points).length,
       },
       {
         type: FilterType.future,

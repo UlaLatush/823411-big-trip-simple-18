@@ -4,7 +4,7 @@ import {FilterType} from '../mock/const.js';
 //const createEmptyListTemplate = () => '<p class="trip-events__msg">Click New Event to create your first point</p>';
 
 const NoPointsTextType = {
-  [FilterType.everything]: 'Click New Event to create your first point',
+  [FilterType.all]: 'Click New Event to create your first point',
   [FilterType.future]: 'There are no future events now',
   [FilterType.past]: 'There are no events in the past for now'
 };

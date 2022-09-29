@@ -5,7 +5,7 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import dayjs from 'dayjs';
 
-const BLANC_EVENT = {
+const BLANK_EVENT = {
   dateFrom: dayjs().toDate(),
   dateTo: dayjs().toDate(),
   destination: null,
@@ -151,7 +151,7 @@ export default class EventEditView extends AbstractStatefulView {
     super();
 
     if (point === null) {
-      point = BLANC_EVENT;
+      point = BLANK_EVENT;
     }
 
     this._state = EventEditView.parsePointToState(point);
