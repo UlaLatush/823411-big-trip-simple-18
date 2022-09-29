@@ -1,6 +1,7 @@
 import {render, remove} from '../render.js';
 import EventView from '../view/event-view.js';
 import EventEditView from '../view/event-edit-view.js';
+import {UserAction, UpdateType} from '../mock/const.js';
 
 export default class EventPresenter {
 
@@ -12,10 +13,13 @@ export default class EventPresenter {
   #prevEditPointComponent = null;
   #openedViews = [];
 
-  constructor(tripList, destinations, offersByType) {
+  #changeData = null;
+
+  constructor(tripList, destinations, offersByType, changeData) {
     this.#tripList = tripList;
     this.#destinations = destinations;
     this.#offersByType = offersByType;
+    this.#changeData = changeData;
   }
 
   init = (point) => {
@@ -23,7 +27,7 @@ export default class EventPresenter {
     this.#renderPoint(point);
   };
 
-  clearOpenedViews = () => {
+  clear = () => {
     this.#openedViews.forEach((e) => (remove(e)));
   };
 
@@ -76,14 +80,24 @@ export default class EventPresenter {
       clearPrevComponents();
     });
 
-    editPointComponent.setSavePointHandler(() => {
+    editPointComponent.setSavePointHandler((point) => {
       replaceEditFormToView();
       clearPrevComponents();
+      this.#changeData(
+        UserAction.UPDATE_POINT,
+        UpdateType.MINOR,
+        point
+      );
     });
 
-    editPointComponent.setDeletePointHandler(() => {
+    editPointComponent.setDeletePointHandler((point) => {
       replaceEditFormToView();
       clearPrevComponents();
+      this.#changeData(
+        UserAction.DELETE_POINT,
+        UpdateType.MINOR,
+        point
+      );
     });
 
     render(pointComponent, this.#tripList.element);
