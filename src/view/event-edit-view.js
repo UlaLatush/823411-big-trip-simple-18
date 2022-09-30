@@ -3,20 +3,34 @@ import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import {POINT_TYPES} from '../mock/const.js';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
+import dayjs from 'dayjs';
 
+const BLANK_EVENT = {
+  dateFrom: dayjs().toDate(),
+  dateTo: dayjs().toDate(),
+  destination: null,
+  offers: [],
+  type: 'taxi',
+  basePrice: null,
+  isFavorite: false,
+  id: null
+};
 
 const createEventEditTemplate = (point, destinations, offersByType) => {
 
   const {dateFrom, dateTo, destination, basePrice, type, offers} = point;
 
-  const destinationObj = getDestinationById(destinations, destination);
-  const destinationName = destinationObj.name;
+  const destinationObj = destination !== null ? getDestinationById(destinations, destination) : null;
+  const destinationName = destinationObj !== null ? destinationObj.name : '';
+  const descriptionText = destinationObj !== null ? destinationObj.description : '';
+  const pictures = destinationObj !== null ? destinationObj.pictures : [];
+
   const availableOffers = getAvailableOffersByType(offersByType, type);
 
   const dateFromTime = dateAndTime(dateFrom);
   const dateToTime = dateAndTime(dateTo);
-  const descriptionText = destinationObj.description;
-  const pictures = destinationObj.pictures;
+
+  const correctedBasePrice = basePrice === null ? '' : basePrice;
 
   const eventTypeTemplate = (pointType, checked) => `<div class="event__type-item">
     <input id="event-type-${pointType}" class="event__type-input visually-hidden" type="radio" name="event-type" value="${pointType}" ${checked ? 'checked' : ''}>
@@ -66,8 +80,8 @@ const createEventEditTemplate = (point, destinations, offersByType) => {
 
     return (`
       <div class="event__offer-selector">
-        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offerName}-1" type="checkbox" name="event-offer-${offerName}" ${checked}>
-        <label class="event__offer-label" for="event-offer-${offerName}-1">
+        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${id}" type="checkbox" name="event-offer-${offerName}" ${checked}>
+        <label class="event__offer-label" for="event-offer-${id}">
           <span class="event__offer-title">${title}</span>&plus;&euro;&nbsp;<span class="event__offer-price">${price}</span>
         </label>
       </div>
@@ -96,7 +110,7 @@ const createEventEditTemplate = (point, destinations, offersByType) => {
         <span class="visually-hidden">Price</span>
         &euro;
       </label>
-      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}">
+      <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${correctedBasePrice}">
     </div>
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
     <button class="event__reset-btn" type="reset">Delete</button>
@@ -135,6 +149,11 @@ export default class EventEditView extends AbstractStatefulView {
 
   constructor(point, destinations, offersByType) {
     super();
+
+    if (point === null) {
+      point = BLANK_EVENT;
+    }
+
     this._state = EventEditView.parsePointToState(point);
     this.point = point;
     this.destinations = destinations;
@@ -142,6 +161,8 @@ export default class EventEditView extends AbstractStatefulView {
     this.#setChangePointType();
     this.#setChangeDestination();
     this.#setDatePicker();
+    this.#setSelectOfferHandler();
+    this.#setChangePriceHandler();
   }
 
   get template() {
@@ -261,7 +282,40 @@ export default class EventEditView extends AbstractStatefulView {
 
   #deletePointHandler = (evt) => {
     evt.preventDefault();
-    this._callback.delete();
+    this._callback.delete(EventEditView.parsePointToState(this._state));
+  };
+
+  #setSelectOfferHandler = () => {
+    this.element.querySelectorAll('.event__offer-checkbox').forEach((checkbox) => checkbox.addEventListener('click', this.#selectOfferHandler));
+  };
+
+  #selectOfferHandler = (evt) => {
+    evt.preventDefault();
+    let offers = [...this._state.offers];
+    const offerId = Number((evt.target.id.slice(-1)));
+
+    if (evt.target.checked) {
+      const offersByType = this.offersByType.find((item) => item.type === this._state.type).offers;
+      const offer = offersByType.find(({id}) => offerId === id);
+      offers.push(offer.id);
+    } else {
+      offers = this._state.offers.filter((id) => offerId !== id);
+    }
+
+    this.updateElement({
+      offers,
+    });
+  };
+
+  #setChangePriceHandler = () => {
+    this.element.querySelector('.event__input--price').addEventListener('input', this.#changePriceHandler);
+  };
+
+  #changePriceHandler = (evt) => {
+    evt.preventDefault();
+    this._setState({
+      basePrice: Number(evt.target.value),
+    });
   };
 
   _restoreHandlers = () => {
@@ -271,5 +325,7 @@ export default class EventEditView extends AbstractStatefulView {
     this.setDeletePointHandler(this._callback.delete);
     this.#setChangeDestination();
     this.#setDatePicker();
+    this.#setSelectOfferHandler();
+    this.#setChangePriceHandler();
   };
 }

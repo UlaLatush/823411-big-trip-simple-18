@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import {FilterType} from './mock/const';
 
 const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -19,6 +20,17 @@ const getEventTitle = (destination, pointType) => {
   return `${eventType} ${destinationName}`;
 };
 
+const isFuture = (dateFrom, dateTo) => dayjs(dateFrom).isAfter(dayjs(), 'd') || dayjs(dateTo).isAfter(dayjs(), 'd')
+    || dayjs(dateFrom).isSame(dayjs(), 'd') || dayjs(dateTo).isSame(dayjs(), 'd');
+
+const isPastPoint = (dateFrom, dateTo) => dayjs(dateFrom).isBefore(dayjs(), 'd') || dayjs(dateTo).isBefore(dayjs(), 'd');
+
+const filter = {
+  [FilterType.all]: (points) => points,
+  [FilterType.past]: (points) => points.filter(({dateFrom, dateTo}) => isPastPoint(dateFrom, dateTo)),
+  [FilterType.future]: (points) => points.filter(({dateFrom, dateTo}) => isFuture(dateFrom, dateTo)),
+};
+
 const sortByPrice = (points) => {
   points.sort((point1, point2) => (point1.basePrice - point2.basePrice));
 };
@@ -26,6 +38,8 @@ const sortByPrice = (points) => {
 const sortByDate = (points) => {
   points.sort((point1, point2) => dayjs(point1.dateFrom).diff(dayjs(point2.dateFrom)));
 };
+
+const sortByTime = (pointA, pointB) => dayjs(pointB.dateTo).diff(dayjs(pointB.dateFrom)) - dayjs(pointA.dateTo).diff(dayjs(pointA.dateFrom));
 
 const getDestinationById = (destinations, id) => destinations.find((destination) => destination.id === id);
 
@@ -38,4 +52,4 @@ const getOfferById = (offersByType, pointType, offerId) => getAvailableOffersByT
 
 const getSelectedOfferIds = (offersByPoint, pointType) => getAvailableOffersByType(offersByPoint, pointType).filter((e) => e.id % 2 === 0).map((e) => e.id);
 
-export {getDestinationIdByName, humanizePointDate, sortByDate, sortByPrice, getRandomValue, getRandomInteger, humanizePointTime, dateAndTime, getEventTitle, getDestinationById, getAvailableOffersByType, getSelectedOfferIds, getOfferById};
+export {isFuture, isPastPoint, sortByTime, filter, getDestinationIdByName, humanizePointDate, sortByDate, sortByPrice, getRandomValue, getRandomInteger, humanizePointTime, dateAndTime, getEventTitle, getDestinationById, getAvailableOffersByType, getSelectedOfferIds, getOfferById};
