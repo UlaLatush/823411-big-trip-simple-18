@@ -1,4 +1,4 @@
-import {POINT_TYPES, POINT_COUNT} from './const.js';
+import {POINT_TYPES, POINT_COUNT} from '../const.js';
 import {getRandomValue, getRandomInteger, getSelectedOfferIds} from '../utils.js';
 import {getOffersByType} from './offer-mock';
 import dayjs from 'dayjs';

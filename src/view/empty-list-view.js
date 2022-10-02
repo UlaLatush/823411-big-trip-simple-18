@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import {FilterType} from '../mock/const.js';
+import {FilterType} from '../const.js';
 
 //const createEmptyListTemplate = () => '<p class="trip-events__msg">Click New Event to create your first point</p>';
 

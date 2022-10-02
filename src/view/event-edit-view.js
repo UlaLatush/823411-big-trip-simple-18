@@ -1,6 +1,6 @@
 import {dateAndTime, getDestinationById, getAvailableOffersByType, getDestinationIdByName} from '../utils.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
-import {POINT_TYPES} from '../mock/const.js';
+import {POINT_TYPES} from '../const.js';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import dayjs from 'dayjs';

@@ -1,7 +1,7 @@
 import {render, remove} from '../render.js';
 import EventView from '../view/event-view.js';
 import EventEditView from '../view/event-edit-view.js';
-import {UserAction, UpdateType} from '../mock/const.js';
+import {UserAction, UpdateType} from '../const.js';
 
 export default class EventPresenter {
 
