@@ -1,6 +1,6 @@
 import {render, remove, RenderPosition} from '../render.js';
 import EventEditView from '../view/event-edit-view.js';
-import {UserAction, UpdateType} from '../mock/const.js';
+import {UserAction, UpdateType} from '../const.js';
 
 export default class EventNewPresenter {
 
@@ -12,15 +12,17 @@ export default class EventNewPresenter {
   #offersByType = null;
   #changeData = null;
 
-  constructor(tripList, destinations, offersByType, changeData, addPointButtonComponent) {
+  constructor(tripList, changeData, addPointButtonComponent) {
+
     this.#tripList = tripList;
-    this.#destinations = destinations;
-    this.#offersByType = offersByType;
+
     this.#changeData = changeData;
     this.#addPointButtonComponent = addPointButtonComponent;
   }
 
-  init = () => {
+  init = (destinations, offersByType) => {
+    this.#destinations = destinations;
+    this.#offersByType = offersByType;
 
     if (this.#editPointComponent !== null) {
       return;

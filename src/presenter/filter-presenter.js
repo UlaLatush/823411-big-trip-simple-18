@@ -2,7 +2,7 @@ import {render, replace, remove, RenderPosition} from '../framework/render.js';
 import FiltersView from '../view/filters-view';
 import {filter} from '/src/utils.js';
 
-import {FilterType, UpdateType} from '../mock/const.js';
+import {FilterType, UpdateType} from '../const.js';
 
 export default class FilterPresenter {
 

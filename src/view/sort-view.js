@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import {SortType} from '../mock/const.js';
+import {SortType} from '../const.js';
 
 const createSortTemplate = () => (`
 <form class="trip-events__trip-sort  trip-sort" action="#" method="get">
@@ -37,6 +37,10 @@ export default class SortView extends AbstractView {
 
   get template() {
     return createSortTemplate(this.#sortType);
+  }
+
+  disable() {
+    this.element.querySelectorAll('.trip-sort__input').forEach((item) => item.setAttribute('disabled', ''));
   }
 
   setSortTypeChangeHandler = (callback) => {

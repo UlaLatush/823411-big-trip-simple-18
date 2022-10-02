@@ -1,5 +1,5 @@
 import {getRandomInteger} from '../utils.js';
-import {POINT_TYPES} from '../mock/const.js';
+import {POINT_TYPES} from '../const.js';
 
 const offers = [
   {

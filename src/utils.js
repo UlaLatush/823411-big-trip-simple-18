@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {FilterType} from './mock/const';
+import {FilterType} from './const';
 
 const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));

@@ -2,24 +2,25 @@ import {render, remove} from '../render.js';
 import SortView from '../view/sort-view.js';
 import TripEventsListView from '../view/trip-events-list-view';
 import EmptyListView from '../view/empty-list-view';
+import LoadingView from '../view/loading-view';
 import EventPresenter from './event-presenter';
 import EventNewPresenter from './event-new-presenter';
 import EventNewButtonView from '../view/event-new-button-view.js';
-import {SortType, UserAction, UpdateType, FilterType} from '../mock/const.js';
+import {SortType, UserAction, UpdateType, FilterType} from '../const.js';
 import {sortByPrice, sortByDate, filter} from '../utils.js';
+import {RenderPosition} from '../framework/render';
 
 export default class BoardPresenter {
 
   #boardContainer = null;
   #boardMainElement = null;
   #pointModel = null;
-  #destinationModel = null;
-  #offerModel = null;
   #filterModel = null;
 
   #tripList = new TripEventsListView();
   #sortComponent = null;
   #emptyListComponent = null;
+  #loadingComponent = new LoadingView();
 
   #eventNewButtonComponent = null;
 
@@ -27,27 +28,22 @@ export default class BoardPresenter {
   #currentSortType = SortType.DAY;
   #eventPresenter = null;
   #eventNewPresenter = null;
+  #isLoading = true;
 
-  init = (boardContainer, boardMainElement, pointModel, destinationModel, offerModel, filterModel) => {
+  init = (boardContainer, boardMainElement, pointModel, filterModel) => {
 
     this.#boardContainer = boardContainer;
     this.#boardMainElement = boardMainElement;
 
     this.#pointModel = pointModel;
-    this.#destinationModel = destinationModel;
-    this.#offerModel = offerModel;
     this.#filterModel = filterModel;
 
     this.#pointModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
 
-    this.destinations = [...this.#destinationModel.destinations];
-    this.offersByType = [...this.#offerModel.offersByType];
-
     this.#eventNewButtonComponent = new EventNewButtonView();
-    this.#eventNewButtonComponent.setClickHandler(this.createPoint);
 
-    this.#eventNewPresenter = new EventNewPresenter(this.#tripList, this.destinations, this.offersByType, this.#handleViewAction, this.#eventNewButtonComponent);
+    this.#eventNewPresenter = new EventNewPresenter(this.#tripList, this.#handleViewAction, this.#eventNewButtonComponent);
 
     this.#renderBoard();
     this.#renderEventNewButton();
@@ -72,7 +68,7 @@ export default class BoardPresenter {
   createPoint = () => {
     this.#currentSortType = SortType.DAY;
     this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.all);
-    this.#eventNewPresenter.init();
+    this.#eventNewPresenter.init(this.#pointModel.destinations, this.#pointModel.offers);
   };
 
   #handleViewAction = (actionType, updateType, point) => {
@@ -101,6 +97,12 @@ export default class BoardPresenter {
       case UpdateType.MAJOR:
         this.#clearBoard({resetSortType: true});
         this.#renderBoard();
+        break;
+      case UpdateType.INIT:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        this.#renderBoard();
+        this.#renderEventNewButton();
         break;
     }
   };
@@ -134,6 +136,11 @@ export default class BoardPresenter {
 
   #renderBoard = () => {
 
+    if (this.#isLoading) {
+      this.#renderLoading();
+      return;
+    }
+
     // represent empty trip list
     if (this.points.length === 0) {
       this.#renderEmptyList();
@@ -149,6 +156,13 @@ export default class BoardPresenter {
   };
 
   #renderEventNewButton = () => {
+    if (this.#isLoading) {
+      this.#eventNewButtonComponent.disable();
+    } else {
+      this.#eventNewButtonComponent.enable();
+      this.#eventNewButtonComponent.setClickHandler(this.createPoint);
+    }
+
     render(this.#eventNewButtonComponent, this.#boardMainElement);
   };
 
@@ -158,12 +172,16 @@ export default class BoardPresenter {
   };
 
   #renderPoints = () => {
-    this.#eventPresenter = new EventPresenter(this.#tripList, this.destinations, this.offersByType, this.#handleViewAction);
+    this.#eventPresenter = new EventPresenter(this.#tripList, this.#pointModel.destinations, this.#pointModel.offers, this.#handleViewAction);
     this.points.forEach((e) => (this.#renderPoint(e)));
   };
 
   #renderPoint = (point) => {
     this.#eventPresenter.init(point);
+  };
+
+  #renderLoading = () => {
+    render(this.#loadingComponent, this.#tripList.element, RenderPosition.AFTERBEGIN);
   };
 
   #renderSort = () => {
