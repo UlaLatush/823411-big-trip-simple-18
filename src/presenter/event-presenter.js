@@ -31,6 +31,57 @@ export default class EventPresenter {
     this.#openedViews.forEach((e) => (remove(e)));
   };
 
+  setSaving = (pointId) => {
+
+    const editComponent = this.#getComponentByPointId(EventEditView, pointId);
+
+    if (editComponent !== undefined) {
+      editComponent.updateElement({
+        isDisabled: true,
+        isSaving: true,
+      });
+    }
+  };
+
+  setDeleting = (pointId) => {
+
+    const editComponent = this.#getComponentByPointId(EventEditView, pointId);
+
+    if (editComponent !== undefined) {
+      editComponent.updateElement({
+        isDisabled: true,
+        isSaving: false,
+        isDeleting: true,
+      });
+    }
+  };
+
+  setAborting = (pointId) => {
+
+    const editComponent = this.#getComponentByPointId(EventEditView, pointId);
+
+    const resetFormState = () => {
+      editComponent.updateElement({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    editComponent.shake(resetFormState);
+  };
+
+  /**
+   * The method returns a component instance from trip-list by point identifier.
+   *
+   * @param type - class of component instance
+   * @param pointId - identifier of rendered point
+   */
+  #getComponentByPointId = (type, pointId) => {
+    const comp = this.#openedViews.find((e) => e instanceof type && e.point.id === pointId);
+    return comp;
+  };
+
   #renderPoint = (point) => {
     const pointComponent = new EventView(point, this.#destinations, this.#offersByType);
     const editPointComponent = new EventEditView(point, this.#destinations, this.#offersByType);
@@ -81,23 +132,23 @@ export default class EventPresenter {
     });
 
     editPointComponent.setSavePointHandler((update) => {
-      replaceEditFormToView();
-      clearPrevComponents();
       this.#changeData(
         UserAction.UPDATE_POINT,
         UpdateType.MINOR,
         update
       );
+      //replaceEditFormToView();
+      clearPrevComponents();
     });
 
     editPointComponent.setDeletePointHandler((update) => {
-      replaceEditFormToView();
-      clearPrevComponents();
+      //replaceEditFormToView();
       this.#changeData(
         UserAction.DELETE_POINT,
         UpdateType.MINOR,
         update
       );
+      clearPrevComponents();
     });
 
     render(pointComponent, this.#tripList.element);

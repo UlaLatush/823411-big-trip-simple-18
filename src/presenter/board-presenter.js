@@ -9,6 +9,12 @@ import EventNewButtonView from '../view/event-new-button-view.js';
 import {SortType, UserAction, UpdateType, FilterType} from '../const.js';
 import {sortByPrice, sortByDate, filter} from '../utils.js';
 import {RenderPosition} from '../framework/render';
+import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
+
+const TimeLimit = {
+  LOWER_LIMIT: 350,
+  UPPER_LIMIT: 1000,
+};
 
 export default class BoardPresenter {
 
@@ -29,6 +35,7 @@ export default class BoardPresenter {
   #eventPresenter = null;
   #eventNewPresenter = null;
   #isLoading = true;
+  #uiBlocker = new UiBlocker(TimeLimit.LOWER_LIMIT, TimeLimit.UPPER_LIMIT);
 
   init = (boardContainer, boardMainElement, pointModel, filterModel) => {
 
@@ -71,18 +78,35 @@ export default class BoardPresenter {
     this.#eventNewPresenter.init(this.#pointModel.destinations, this.#pointModel.offers);
   };
 
-  #handleViewAction = (actionType, updateType, point) => {
+  #handleViewAction = async (actionType, updateType, point) => {
+    this.#uiBlocker.block();
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-        this.#pointModel.updatePoint(updateType, point);
+        this.#eventPresenter.setSaving(point.id);
+        try {
+          await this.#pointModel.updatePoint(updateType, point);
+        } catch(err) {
+          this.#eventPresenter.setAborting(point.id);
+        }
         break;
       case UserAction.ADD_POINT:
-        this.#pointModel.createPoint(updateType, point);
+        this.#eventNewPresenter.setSaving();
+        try {
+          await this.#pointModel.createPoint(updateType, point);
+        } catch(err) {
+          this.#eventNewPresenter.setAborting();
+        }
         break;
       case UserAction.DELETE_POINT:
-        this.#pointModel.deletePoint(updateType, point);
+        this.#eventPresenter.setDeleting(point.id);
+        try {
+          await this.#pointModel.deletePoint(updateType, point);
+        } catch(err) {
+          this.#eventPresenter.setAborting(point.id);
+        }
         break;
     }
+    this.#uiBlocker.unblock();
   };
 
   #handleModelEvent = (updateType, point) => {

@@ -18,7 +18,7 @@ const BLANK_EVENT = {
 
 const createEventEditTemplate = (point, destinations, offersByType) => {
 
-  const {dateFrom, dateTo, destination, basePrice, type, offers} = point;
+  const {dateFrom, dateTo, destination, basePrice, type, offers, id, isSaving, isDeleting, isDisabled} = point;
 
   const destinationObj = destination !== null ? getDestinationById(destinations, destination) : null;
   const destinationName = destinationObj !== null ? destinationObj.name : '';
@@ -73,16 +73,16 @@ const createEventEditTemplate = (point, destinations, offersByType) => {
   };
 
 
-  const offersList = availableOffers.map(({id, title, price}) => {
+  const offersList = availableOffers.map((offer) => {
 
-    const offerName = title.split(' ').pop();
-    const checked = offers.find((e) => e === id) ? 'checked' : '';
+    const offerName = offer.title.split(' ').pop();
+    const checked = offers.find((e) => e === offer.id) ? 'checked' : '';
 
     return (`
       <div class="event__offer-selector">
-        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${id}" type="checkbox" name="event-offer-${offerName}" ${checked}>
-        <label class="event__offer-label" for="event-offer-${id}">
-          <span class="event__offer-title">${title}</span>&plus;&euro;&nbsp;<span class="event__offer-price">${price}</span>
+        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.id}" type="checkbox" name="event-offer-${offerName}" ${checked}>
+        <label class="event__offer-label" for="event-offer-${offer.id}">
+          <span class="event__offer-title">${offer.title}</span>&plus;&euro;&nbsp;<span class="event__offer-price">${offer.price}</span>
         </label>
       </div>
     `);
@@ -90,7 +90,7 @@ const createEventEditTemplate = (point, destinations, offersByType) => {
 
   return (`
 <li class="trip-events__item">
-<form class="event event--edit" action="#" method="post">
+<form class="event event--edit" action="#" method="post" ${isDisabled ? 'disabled' : ''}>
   <header class="event__header">
 
     ${eventTypeListTemplate(POINT_TYPES, type)}
@@ -112,8 +112,8 @@ const createEventEditTemplate = (point, destinations, offersByType) => {
       </label>
       <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${correctedBasePrice}">
     </div>
-    <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-    <button class="event__reset-btn" type="reset">Delete</button>
+    <button class="event__save-btn  btn  btn--blue" type="submit" ${isSaving ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
+    <button class="event__reset-btn" type="reset" ${isDeleting ? 'disabled' : ''}>${!id ? 'Cancel' : `${isDeleting ? 'Deleting...' : 'Delete'}`}</button>
     <button class="event__rollup-btn" type="button">
       <span class="visually-hidden">Open event</span>
     </button>
@@ -171,9 +171,20 @@ export default class EventEditView extends AbstractStatefulView {
 
   static parsePointToState = (point) => ({
     ...point,
+    isDisabled: false,
+    isSaving: false,
+    isDeleting: false,
   });
 
-  static parseStateToPoint = (state) => ({...state});
+  static parseStateToPoint = (state) => {
+    const point = {...state};
+
+    delete point.isDisabled;
+    delete point.isSaving;
+    delete point.isDeleting;
+
+    return point;
+  };
 
   removeElement() {
     super.removeElement();

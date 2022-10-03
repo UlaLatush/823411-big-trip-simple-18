@@ -52,13 +52,31 @@ export default class EventNewPresenter {
     document.removeEventListener('keydown', this.#onEscKeyDownHandler);
   };
 
+  setSaving = () => {
+    this.#editPointComponent.updateElement({
+      isDisabled: true,
+      isSaving: true,
+    });
+  };
+
+  setAborting = () => {
+    const resetFormState = () => {
+      this.#editPointComponent.updateElement({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this.#editPointComponent.shake(resetFormState);
+  };
+
   #handleFormSubmit = (point) => {
     this.#changeData(
       UserAction.ADD_POINT,
       UpdateType.MINOR,
       point
     );
-    this.destroy();
   };
 
   #handleDeleteClick = () => {
