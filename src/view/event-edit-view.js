@@ -3,11 +3,10 @@ import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import {POINT_TYPES} from '../const.js';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
-import dayjs from 'dayjs';
 
 const BLANK_EVENT = {
-  dateFrom: dayjs().toDate(),
-  dateTo: dayjs().toDate(),
+  dateFrom: new Date().toISOString(),
+  dateTo: new Date().toISOString(),
   destination: null,
   offers: [],
   type: 'taxi',
@@ -202,7 +201,7 @@ export default class EventEditView extends AbstractStatefulView {
         this.element.querySelectorAll('.event__input--time')[0],
         {
           enableTime: true,
-          dateFormat: 'd/m/y / h:i',
+          dateFormat: 'd/m/y H:i',
           defaultDate: this._state.dateFrom,
           onChange: this.#dueDateStartChangeHandler
         }
@@ -216,7 +215,7 @@ export default class EventEditView extends AbstractStatefulView {
         this.element.querySelectorAll('.event__input--time')[1],
         {
           enableTime: true,
-          dateFormat: 'd/m/y / h:i',
+          dateFormat: 'd/m/y H:i',
           defaultDate: this._state.dateTo,
           onChange: this.#dueDateEndChangeHandler,
         }
@@ -225,13 +224,13 @@ export default class EventEditView extends AbstractStatefulView {
   };
 
 
-  #dueDateStartChangeHandler = (dateFrom) => {
+  #dueDateStartChangeHandler = ([dateFrom]) => {
     this.updateElement({
       dateFrom: dateFrom
     });
   };
 
-  #dueDateEndChangeHandler = (dateTo) => {
+  #dueDateEndChangeHandler = ([dateTo]) => {
     this.updateElement({
       dateTo: dateTo
     });
