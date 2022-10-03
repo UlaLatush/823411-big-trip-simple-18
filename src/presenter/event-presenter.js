@@ -1,7 +1,7 @@
-import {render, remove} from '../render.js';
+import {remove, render} from '../render.js';
 import EventView from '../view/event-view.js';
 import EventEditView from '../view/event-edit-view.js';
-import {UserAction, UpdateType} from '../const.js';
+import {UpdateType, UserAction} from '../const.js';
 
 export default class EventPresenter {
 
@@ -47,13 +47,15 @@ export default class EventPresenter {
 
     const editComponent = this.#getComponentByPointId(EventEditView, pointId);
 
-    if (editComponent !== undefined) {
-      editComponent.updateElement({
-        isDisabled: true,
-        isSaving: false,
-        isDeleting: true,
-      });
+    if (editComponent === undefined) {
+      return;
     }
+
+    editComponent.updateElement({
+      isDisabled: true,
+      isSaving: false,
+      isDeleting: true,
+    });
   };
 
   setAborting = (pointId) => {
@@ -78,8 +80,7 @@ export default class EventPresenter {
    * @param pointId - identifier of rendered point
    */
   #getComponentByPointId = (type, pointId) => {
-    const comp = this.#openedViews.find((e) => e instanceof type && e.point.id === pointId);
-    return comp;
+    this.#openedViews.find((component) => component instanceof type && component.point.id === pointId);
   };
 
   #renderPoint = (point) => {
@@ -137,12 +138,10 @@ export default class EventPresenter {
         UpdateType.MINOR,
         update
       );
-      //replaceEditFormToView();
       clearPrevComponents();
     });
 
     editPointComponent.setDeletePointHandler((update) => {
-      //replaceEditFormToView();
       this.#changeData(
         UserAction.DELETE_POINT,
         UpdateType.MINOR,
