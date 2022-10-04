@@ -12,14 +12,16 @@ export default class EventPresenter {
   #prevPointComponent = null;
   #prevEditPointComponent = null;
   #openedViews = [];
+  #handleCloseNewPoint = null;
 
   #changeData = null;
 
-  constructor(tripList, destinations, offersByType, changeData) {
+  constructor(tripList, destinations, offersByType, changeData, handleCloseNewPoint) {
     this.#tripList = tripList;
     this.#destinations = destinations;
     this.#offersByType = offersByType;
     this.#changeData = changeData;
+    this.#handleCloseNewPoint = handleCloseNewPoint;
   }
 
   init = (point) => {
@@ -35,12 +37,14 @@ export default class EventPresenter {
 
     const editComponent = this.#getComponentByPointId(EventEditView, pointId);
 
-    if (editComponent !== undefined) {
-      editComponent.updateElement({
-        isDisabled: true,
-        isSaving: true,
-      });
+    if (editComponent === undefined) {
+      return;
     }
+
+    editComponent.updateElement({
+      isDisabled: true,
+      isSaving: true,
+    });
   };
 
   setDeleting = (pointId) => {
@@ -79,9 +83,7 @@ export default class EventPresenter {
    * @param type - class of component instance
    * @param pointId - identifier of rendered point
    */
-  #getComponentByPointId = (type, pointId) => {
-    this.#openedViews.find((component) => component instanceof type && component.point.id === pointId);
-  };
+  #getComponentByPointId = (type, pointId) => this.#openedViews.find((component) => component instanceof type && component.point.id === pointId);
 
   #renderPoint = (point) => {
     const pointComponent = new EventView(point, this.#destinations, this.#offersByType);
@@ -123,6 +125,8 @@ export default class EventPresenter {
 
       this.#prevPointComponent = pointComponent;
       this.#prevEditPointComponent = editPointComponent;
+
+      this.#handleCloseNewPoint();
 
       document.addEventListener('keydown', onEscKeyDown);
     });

@@ -140,6 +140,10 @@ export default class BoardPresenter {
     this.#renderBoard();
   };
 
+  #handleCloseNewPoint = () => {
+    this.#eventNewPresenter.destroy();
+  };
+
   #clearBoard = ({resetSortType = false} = {}) => {
 
     // remove components from board
@@ -196,7 +200,7 @@ export default class BoardPresenter {
   };
 
   #renderPoints = () => {
-    this.#eventPresenter = new EventPresenter(this.#tripList, this.#pointModel.destinations, this.#pointModel.offers, this.#handleViewAction);
+    this.#eventPresenter = new EventPresenter(this.#tripList, this.#pointModel.destinations, this.#pointModel.offers, this.#handleViewAction, this.#handleCloseNewPoint);
     this.points.forEach((e) => (this.#renderPoint(e)));
   };
 
