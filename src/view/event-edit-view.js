@@ -168,23 +168,6 @@ export default class EventEditView extends AbstractStatefulView {
     return createEventEditTemplate(this._state, this.destinations, this.offersByType);
   }
 
-  static parsePointToState = (point) => ({
-    ...point,
-    isDisabled: false,
-    isSaving: false,
-    isDeleting: false,
-  });
-
-  static parseStateToPoint = (state) => {
-    const point = {...state};
-
-    delete point.isDisabled;
-    delete point.isSaving;
-    delete point.isDeleting;
-
-    return point;
-  };
-
   removeElement() {
     super.removeElement();
     if (this.#datepickerStart) {
@@ -337,5 +320,23 @@ export default class EventEditView extends AbstractStatefulView {
     this.#setDatePicker();
     this.#setSelectOfferHandler();
     this.#setChangePriceHandler();
+  };
+
+
+  static parsePointToState = (point) => ({
+    ...point,
+    isDisabled: false,
+    isSaving: false,
+    isDeleting: false,
+  });
+
+  static parseStateToPoint = (state) => {
+    const point = {...state};
+
+    delete point.isDisabled;
+    delete point.isSaving;
+    delete point.isDeleting;
+
+    return point;
   };
 }

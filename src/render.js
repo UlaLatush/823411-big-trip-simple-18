@@ -7,13 +7,6 @@ const RenderPosition = {
   AFTEREND: 'afterend',
 };
 
-const createElement = (template) => {
-  const newElement = document.createElement('div');
-  newElement.innerHTML = template;
-
-  return newElement.firstElementChild;
-};
-
 const render = (component, container, place = RenderPosition.BEFOREEND) => {
   container.insertAdjacentElement(place, component.element);
 };
@@ -31,4 +24,4 @@ const remove = (component) => {
   component.removeElement();
 };
 
-export {RenderPosition, createElement, render, remove};
+export {RenderPosition, render, remove};

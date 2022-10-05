@@ -36,7 +36,7 @@ export default class EventNewPresenter {
 
     render(this.#editPointComponent, this.#tripList.element, RenderPosition.AFTERBEGIN);
     this.#addPointButtonComponent.disable();
-    document.addEventListener('keydown', this.#onEscKeyDownHandler);
+    document.addEventListener('keydown', this.#escKeyDownHandler);
   };
 
   destroy = () => {
@@ -49,7 +49,7 @@ export default class EventNewPresenter {
     remove(this.#editPointComponent);
     this.#editPointComponent = null;
 
-    document.removeEventListener('keydown', this.#onEscKeyDownHandler);
+    document.removeEventListener('keydown', this.#escKeyDownHandler);
   };
 
   setSaving = () => {
@@ -83,7 +83,7 @@ export default class EventNewPresenter {
     this.destroy();
   };
 
-  #onEscKeyDownHandler = (evt) => {
+  #escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
       this.destroy();

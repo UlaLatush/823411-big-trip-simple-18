@@ -1,7 +1,5 @@
 const POINT_TYPES = ['taxi','bus','train','ship','drive','flight','check-in', 'sightseeing','restaurant'];
 
-const POINT_COUNT = 4;
-
 const SortType = {
   DAY: 'day',
   PRICE: 'price',
@@ -27,4 +25,4 @@ const UserAction = {
   DELETE_POINT: 'DELETE_POINT'
 };
 
-export {POINT_TYPES, POINT_COUNT, SortType, UpdateType, UserAction, FilterType};
+export {POINT_TYPES, SortType, UpdateType, UserAction, FilterType};

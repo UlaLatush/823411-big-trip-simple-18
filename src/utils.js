@@ -8,8 +8,6 @@ const getRandomInteger = (a = 0, b = 1) => {
   return Math.floor(lower + Math.random() * (upper - lower + 1));
 };
 
-const getRandomValue = (items) => items[getRandomInteger(0, items.length - 1)];
-
 const humanizePointTime = (date) => dayjs(date).format('HH:mm');
 const dateAndTime = (date) => dayjs(date).format('DD/MM/YY HH:mm');
 const humanizePointDate = (date) => dayjs(date).format('MMM D');
@@ -39,8 +37,6 @@ const sortByDate = (points) => {
   points.sort((point1, point2) => dayjs(point1.dateFrom).diff(dayjs(point2.dateFrom)));
 };
 
-const sortByTime = (pointA, pointB) => dayjs(pointB.dateTo).diff(dayjs(pointB.dateFrom)) - dayjs(pointA.dateTo).diff(dayjs(pointA.dateFrom));
-
 const getDestinationById = (destinations, id) => destinations.find((destination) => destination.id === id);
 
 const getDestinationIdByName = (destinations, name) => destinations.find((destination) => destination.name === name).id;
@@ -52,4 +48,4 @@ const getOfferById = (offersByType, pointType, offerId) => getAvailableOffersByT
 
 const getSelectedOfferIds = (offersByPoint, pointType) => getAvailableOffersByType(offersByPoint, pointType).filter((e) => e.id % 2 === 0).map((e) => e.id);
 
-export {isFuture, isPastPoint, sortByTime, filter, getDestinationIdByName, humanizePointDate, sortByDate, sortByPrice, getRandomValue, getRandomInteger, humanizePointTime, dateAndTime, getEventTitle, getDestinationById, getAvailableOffersByType, getSelectedOfferIds, getOfferById};
+export {isFuture, isPastPoint, filter, getDestinationIdByName, humanizePointDate, sortByDate, sortByPrice, getRandomInteger, humanizePointTime, dateAndTime, getEventTitle, getDestinationById, getAvailableOffersByType, getSelectedOfferIds, getOfferById};
